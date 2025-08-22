@@ -1,6 +1,6 @@
 // models/Student.js
 import mongoose from "mongoose";
-import User from "./user.js";
+import User from "./User.js";
 
 const studentSchema = new mongoose.Schema({
   enrolledCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],

@@ -1,5 +1,5 @@
-import Course from "../models/Courses.js";
 import User from "../models/User.js";
+import Course from "../models/Courses.js";
 
 export const listCourses = async (req, res) => {
   const { q } = req.query;
