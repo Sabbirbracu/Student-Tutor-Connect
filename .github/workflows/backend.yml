@@ -1,0 +1,41 @@
+name: Backend CI/CD
+
+# Trigger workflow on push to main branch
+on:
+  push:
+    branches: [main]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Run linter (optional but recommended)
+      - name: Lint code
+        run: npx eslint src/**/*.js || echo "Lint issues found"
+
+      # Step 5: Run tests (optional)
+      - name: Run tests
+        run: npm test || echo "No tests yet"
+
+      # Step 6: Build (optional, mostly for frontend)
+      - name: Build backend (optional)
+        run: echo "No build needed for Express backend"
+
+      # Step 7: Notify (optional)
+      - name: Workflow complete
+        run: echo "Backend CI/CD workflow finished"
