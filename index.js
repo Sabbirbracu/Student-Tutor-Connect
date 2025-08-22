@@ -2,14 +2,14 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
-import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
-import authRoutes from "./routes/authRoutes.js";
-import courseRoutes from "./routes/courseRoutes.js";
-import extraRequestRoutes from "./routes/extraRequestRoutes.js";
-import reportRoutes from "./routes/reportRoutes.js";
-import reviewRoutes from "./routes/reviewRoutes.js";
-import slotRoutes from "./routes/slotRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
+import { errorHandler, notFound } from "./src/middleware/errorMiddleware.js";
+import authRoutes from "./src/routes/authRoutes.js";
+import courseRoutes from "./src/routes/courseRoutes.js";
+import extraRequestRoutes from "./src/routes/extraRequestRoutes.js";
+import reportRoutes from "./src/routes/reportRoutes.js";
+import reviewRoutes from "./src/routes/reviewRoutes.js";
+import slotRoutes from "./src/routes/slotRoutes.js";
+import userRoutes from "./src/routes/userRoutes.js";
 
 dotenv.config();
 

@@ -1,10 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
 import Admin from "../models/Admin.js";
 import Student from "../models/Student.js";
 import StudentTutor from "../models/StudentTutor.js";
-
+import User from "../models/User.js";
 
 // Generate JWT
 const generateToken = (id) => {
@@ -80,8 +79,6 @@ export const getMe = async (req, res) => {
   const user = await User.findById(req.user.id);
   res.status(200).json(user);
 };
-
-
 
 // {
 //     "_id": "68a7d9a76dc3f0ee2cba78d8",
