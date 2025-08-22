@@ -1,6 +1,6 @@
 // models/Admin.js
 import mongoose from "mongoose";
-import User from "./User.js";
+import User from "./user.js";
 
 const adminSchema = new mongoose.Schema({});
 
