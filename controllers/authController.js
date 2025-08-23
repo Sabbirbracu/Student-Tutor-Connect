@@ -79,18 +79,3 @@ export const getMe = async (req, res) => {
   const user = await User.findById(req.user.id);
   res.status(200).json(user);
 };
-
-// {
-//     "_id": "68a7d9a76dc3f0ee2cba78d8",
-//     "name": "John Doe",
-//     "email": "john@example.com",
-//     "role": "student",
-//     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YTdkOWE3NmRjM2YwZWUyY2JhNzhkOCIsImlhdCI6MTc1NTgzMDY5NSwiZXhwIjoxNzU4NDIyNjk1fQ.XPHdfuIAovmySGdCh9vXFYiozoephm_NVuSF5J8TqIE"
-// }
-
-// {
-//   "name": "John Doe",
-//   "email": "john@example.com",
-//   "password": "123456",
-//   "role": "student"  // or "studentTutor" or "admin"
-// }

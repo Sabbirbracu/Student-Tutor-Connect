@@ -1,19 +1,30 @@
-import User from "../models/User.js";
 import Course from "../models/Courses.js";
+import User from "../models/User.js";
 
 export const listCourses = async (req, res) => {
   const { q } = req.query;
   const filter = q ? { $text: { $search: q } } : {};
-  const courses = await Course.find(filter).select("name code description");
+  const courses = await Course.find(filter).select(
+    "name code description tutors"
+  );
   res.json(courses);
 };
 
 export const createCourse = async (req, res) => {
-  const { name, code, description } = req.body;
-  const exists = await Course.findOne({ code });
-  if (exists) return res.status(400).json({ message: "Course code exists" });
-  const course = await Course.create({ name, code, description });
-  res.status(201).json(course);
+  try {
+    const { name, code, description } = req.body;
+    if (!name || !code || !description) {
+      return res.status(400).json({ message: "All fields are required" });
+    } else {
+      const exists = await Course.findOne({ code });
+      if (exists)
+        return res.status(400).json({ message: "Course code exists" });
+      const course = await Course.create({ name, code, description });
+      res.status(201).json(course);
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 export const deleteCourse = async (req, res) => {
