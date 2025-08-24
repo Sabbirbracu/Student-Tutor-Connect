@@ -12,8 +12,9 @@ const reportSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    reason: { type: String, required: true }, // e.g., "misbehavior", "spam"
+    reason: { type: String, required: true },
     severity: { type: String, enum: ["low", "medium", "high"], default: "low" },
+    status: { type: String, enum: ["pending", "reviewed"], default: "pending" },
     actionTaken: {
       type: String,
       enum: ["none", "warning", "ban"],
