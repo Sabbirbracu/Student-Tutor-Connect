@@ -12,10 +12,27 @@ const slotSchema = new mongoose.Schema(
       ref: "Course",
       required: true,
     },
-    startTime: { type: Date, required: true },
-    endTime: { type: Date, required: true },
-    isBooked: { type: Boolean, default: false },
-    bookedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Student who booked
+    day: {
+      type: String,
+      enum: [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ],
+      required: true,
+    },
+    startTime: {
+      type: String, // Format: "HH:mm" e.g., "14:00"
+      required: true,
+    },
+    endTime: {
+      type: String, // Format: "HH:mm" e.g., "17:00"
+      required: true,
+    },
   },
   { timestamps: true }
 );

@@ -1,29 +1,32 @@
 import express from "express";
+import { protect, requireRole } from "../middleware/authMiddleware.js";
 import {
   createSlot,
-  requestExtraSlot,
-  updateExtraSlotRequest,
-  viewSlots,
+  getMySlots,
+  updateSlot,
+  getSlotsForStudent,
 } from "../controllers/slotController.js";
-import { protect, requireRole } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// StudentTutor creates slots
+// ======================
+// Tutor Routes (Protected)
+// ======================
+
+// Create a slot (StudentTutor)
 router.post("/", protect, requireRole("studentTutor"), createSlot);
 
-// Students view slots
-router.get("/", protect, requireRole("student"), viewSlots);
+// Get tutor's own slots
+router.get("/mine", protect, requireRole("studentTutor"), getMySlots);
 
-// Student requests extra slot
-router.post("/extra", protect, requireRole("student"), requestExtraSlot);
+// Update a slot (optional)
+router.patch("/:id", protect, requireRole("studentTutor"), updateSlot);
 
-// StudentTutor approves/rejects extra slot
-router.patch(
-  "/extra/:requestId",
-  protect,
-  requireRole("studentTutor"),
-  updateExtraSlotRequest
-);
+// ======================
+// Public Route (Student access)
+// ======================
+
+// Get slots for a tutor (can filter by course)
+router.get("/", getSlotsForStudent);
 
 export default router;
