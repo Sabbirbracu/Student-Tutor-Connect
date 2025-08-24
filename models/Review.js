@@ -7,7 +7,7 @@ const reviewSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    tutor: {
+    studentTutor: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -17,8 +17,10 @@ const reviewSchema = new mongoose.Schema(
       ref: "Course",
       required: true,
     },
-    rating: { type: Number, min: 1, max: 5, required: true },
-    review: { type: String },
+    review: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

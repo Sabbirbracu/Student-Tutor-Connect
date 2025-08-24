@@ -1,15 +1,11 @@
+// routes/extraRequestRoutes.js
 import express from "express";
-import {
-  actOnExtraRequest,
-  createExtraRequest,
-  myExtraRequests,
-} from "../controllers/extraRequestController.js";
-import { protect, requireRole } from "../middleware/authMiddleware.js";
+import { createExtraRequest } from "../controllers/extraRequestController.js";
+import { protect } from "../middleware/authMiddleware.js"; // your auth middleware
 
 const router = express.Router();
 
-router.post("/", protect, requireRole("student"), createExtraRequest);
-router.get("/mine", protect, requireRole("student", "tutor"), myExtraRequests);
-router.patch("/:id", protect, requireRole("tutor"), actOnExtraRequest);
+// POST /api/extra-requests
+router.post("/", protect, createExtraRequest);
 
 export default router;

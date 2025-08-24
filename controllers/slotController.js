@@ -1,5 +1,7 @@
+import ExtraRequest from "../models/ExtraRequest.js";
 import Slot from "../models/Slot.js";
 
+// 1️⃣ StudentTutor creates slot
 export const createSlot = async (req, res) => {
   const { course, startTime, endTime } = req.body;
   const slot = await Slot.create({
@@ -11,64 +13,45 @@ export const createSlot = async (req, res) => {
   res.status(201).json(slot);
 };
 
-export const mySlots = async (req, res) => {
-  // tutors see their slots; students can filter by course
+// 2️⃣ Students view slots (filter by course)
+export const viewSlots = async (req, res) => {
+  const { courseId } = req.query;
   const filter = {};
-  if (req.user.role === "tutor") filter.tutor = req.user._id;
-  if (req.query.course) filter.course = req.query.course;
+  if (courseId) filter.course = courseId;
+
   const slots = await Slot.find(filter)
-    .populate("course", "name code")
-    .populate("bookedBy", "name");
+    .populate("tutor", "name email")
+    .populate("course", "name code");
   res.json(slots);
 };
 
-export const courseSlots = async (req, res) => {
-  const { courseId } = req.params;
-  const slots = await Slot.find({
+// 3️⃣ Student requests extra slot
+export const requestExtraSlot = async (req, res) => {
+  const { tutorId, courseId, requestedTime } = req.body;
+
+  const extraRequest = await ExtraRequest.create({
+    student: req.user._id,
+    tutor: tutorId,
     course: courseId,
-    isBooked: false,
-    startTime: { $gte: new Date() },
-  }).populate("tutor", "name email");
-  res.json(slots);
+    requestedTime,
+    status: "pending",
+  });
+
+  res.status(201).json(extraRequest);
 };
 
-export const bookSlot = async (req, res) => {
-  // student books an open slot
-  const slot = await Slot.findById(req.params.id);
-  if (!slot) return res.status(404).json({ message: "Slot not found" });
-  if (slot.isBooked)
-    return res.status(400).json({ message: "Slot already booked" });
-  slot.isBooked = true;
-  slot.bookedBy = req.user._id;
-  await slot.save();
-  res.json({ message: "Booked", slotId: slot._id });
-};
+// 4️⃣ StudentTutor approves/rejects extra slot
+export const updateExtraSlotRequest = async (req, res) => {
+  const { requestId } = req.params;
+  const { status } = req.body; // accepted or rejected
 
-export const cancelSlot = async (req, res) => {
-  const slot = await Slot.findById(req.params.id);
-  if (!slot) return res.status(404).json({ message: "Slot not found" });
+  const request = await ExtraRequest.findById(requestId);
+  if (!request) return res.status(404).json({ message: "Request not found" });
 
-  // allow the student who booked OR the tutor who owns it
-  const isOwner =
-    req.user.role === "tutor" && String(slot.tutor) === String(req.user._id);
-  const isBooker =
-    req.user.role === "student" &&
-    String(slot.bookedBy) === String(req.user._id);
-
-  if (!isOwner && !isBooker)
+  if (String(request.tutor) !== String(req.user._id))
     return res.status(403).json({ message: "Not allowed" });
 
-  slot.isBooked = false;
-  slot.bookedBy = undefined;
-  await slot.save();
-  res.json({ message: "Booking canceled" });
-};
-
-export const deleteSlot = async (req, res) => {
-  const slot = await Slot.findById(req.params.id);
-  if (!slot) return res.status(404).json({ message: "Slot not found" });
-  if (String(slot.tutor) !== String(req.user._id))
-    return res.status(403).json({ message: "Not allowed" });
-  await slot.deleteOne();
-  res.json({ message: "Slot deleted" });
+  request.status = status;
+  await request.save();
+  res.json(request);
 };

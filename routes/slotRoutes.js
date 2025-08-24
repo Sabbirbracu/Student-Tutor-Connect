@@ -1,33 +1,29 @@
 import express from "express";
 import {
-  bookSlot,
-  cancelSlot,
-  courseSlots,
   createSlot,
-  deleteSlot,
-  mySlots,
+  requestExtraSlot,
+  updateExtraSlotRequest,
+  viewSlots,
 } from "../controllers/slotController.js";
 import { protect, requireRole } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// public: list open slots for a course
-router.get("/course/:courseId", courseSlots);
+// StudentTutor creates slots
+router.post("/", protect, requireRole("studentTutor"), createSlot);
 
-// tutor ops
-router.post("/", protect, requireRole("tutor"), createSlot);
-router.get("/mine", protect, requireRole("tutor", "student"), mySlots); // both can list own context
+// Students view slots
+router.get("/", protect, requireRole("student"), viewSlots);
 
-// booking
-router.patch("/:id/book", protect, requireRole("student"), bookSlot);
+// Student requests extra slot
+router.post("/extra", protect, requireRole("student"), requestExtraSlot);
+
+// StudentTutor approves/rejects extra slot
 router.patch(
-  "/:id/cancel",
+  "/extra/:requestId",
   protect,
-  requireRole("student", "tutor"),
-  cancelSlot
+  requireRole("studentTutor"),
+  updateExtraSlotRequest
 );
-
-// manage
-router.delete("/:id", protect, requireRole("tutor"), deleteSlot);
 
 export default router;

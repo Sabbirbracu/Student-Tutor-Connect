@@ -9,6 +9,7 @@ import extraRequestRoutes from "./routes/extraRequestRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import slotRoutes from "./routes/slotRoutes.js";
+import studentTutorRoutes from "./routes/studentTutorRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", userRoutes);
+app.use("/api/student-tutors", studentTutorRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/slots", slotRoutes);

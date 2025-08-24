@@ -7,7 +7,10 @@ import { protect, requireRole } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/tutor/:tutorId", getTutorReviews); // public view
+// Get reviews for a specific StudentTutor
+router.get("/tutor/:tutorId", getTutorReviews);
+
+// Create a new review (only students can create)
 router.post("/", protect, requireRole("student"), createReview);
 
 export default router;
